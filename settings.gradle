@@ -1,0 +1,2 @@
+include ':app', ':retrofitext'
+rootProject.name='RetrofitExtExample'
