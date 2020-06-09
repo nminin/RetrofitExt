@@ -37,19 +37,19 @@ fun <T> Call<T>.response(
                 } else {
                     val message = errorDeserializer?.let {
                         it.invoke(response.code(), response.errorBody())
-                    }?.let {
+                    }?: response.errorBody()?.let {
                         try {
                             Gson().fromJson(
-                                response.errorBody()?.string(),
+                                it.string(),
                                 ErrorResponse::class.java
                             )
                                 .message()
                         } catch (e: IllegalStateException) {
-                            response.message()
+                            it.string()
                         } catch (e: JsonSyntaxException) {
-                            response.message()
+                            it.string()
                         } catch (e: NullPointerException) {
-                            response.message()
+                            it.string()
                         }
                     } ?: "Empty error message"
                     onError.invoke(response.code(), message)
